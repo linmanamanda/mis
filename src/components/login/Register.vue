@@ -6,18 +6,38 @@
           <div slot="header" class="clearfix">
             <span>注册</span>
           </div>
-          <el-form label-width="80px" label-position="left" ref="ruleForm" status-icon :rules="rules">
-            <el-form-item label="账号" >
-              <el-input v-model="form.name"></el-input>
+          <el-form label-width="80px" label-position="left">
+            <el-form-item label="姓名">
+              <el-input v-model="userName"></el-input>
+            </el-form-item>
+            <el-form-item label="学号">
+              <el-input v-model="userAccount"></el-input>
+            </el-form-item>
+            <el-form-item label="籍贯">
+              <el-select v-model="userBirthplaceId">
+                <el-option v-for="item in birthplaces" :label="item.birthplaceName" :value="item.birthplaceId" :key="item.birthplaceId"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="性别">
+              <el-select v-model="userGender">
+                <el-option label="男" value="0"></el-option>
+                <el-option label="女" value="1"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="邮箱">
-              <el-input v-model="form.email" type="password"></el-input>
+              <el-input v-model="userEmail" type="password"></el-input>
             </el-form-item>
-            <el-form-item label="新密码" prop="rules.pass">
-              <el-input v-model="form.password"></el-input>
+            <el-form-item label="班级">
+              <el-select v-model="userClassId">
+                <el-option label="男" value="shanghai"></el-option>
+                <el-option label="女" value="beijing"></el-option>
+              </el-select>
             </el-form-item>
-            <el-form-item label="确认密码" prop="rules.checkPass">
-              <el-input v-model="form.checkPassword" type="password"></el-input>
+            <el-form-item label="密码">
+              <el-input v-model="userPassword" type="password"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码">
+              <el-input v-model="userPasswordAgain" type="password"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary">提交</el-button>
@@ -30,47 +50,41 @@
 </template>
 
 <script>
+  import service from '../../services/login/index';
+
   export default {
     name: 'Register',
     data() {
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (this.form.checkPassword !== '') {
-            this.$refs.ruleForm.validateField('checkPass');
-          }
-          callback();
-        }
-      };
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.ruleForm.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
       return {
-        form: {
-          name: '',
-          email: '',
-          password: '',
-          checkPassword: '',
-        },
-        rules: {
-          pass: [
-            { validator: validatePass, trigger: 'blur' }
-          ],
-          checkPass: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-        }
+        userName: '',
+        userAccount: '',
+        userPassword: '',
+        userPasswordAgain: '',
+        userGender: '',
+        userEmail: '',
+        userClassId: '',
+        userBirthplaceId: '',
+        userEnterSchoolTime: '',
+        birthplaces: [
+          {
+            birthplaceName: "北京市",
+            birthplaceId: 1
+          },
+        ]
       }
     },
     methods: {
-      
+      fetchBirthPlaces() {
+        return service.getBirthPlace()
+          .then(res => {
+            if (res.result) {
+              this.birthplaces = res.data;
+            }
+          })
+      },
+      submit() {
+
+      },
     }
   }  
 </script>

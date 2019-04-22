@@ -3,13 +3,13 @@
     <h1 class="title">实验室管理系统</h1>
     <el-form label-width="80px">
       <el-form-item label="账号">
-        <el-input v-model="email"></el-input>
+        <el-input v-model="userAccount"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="password" type="password"></el-input>
+        <el-input v-model="userPassword" type="password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="width: 100%;">登录</el-button>
+        <el-button type="primary" style="width: 100%;" @click="login">登录</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="text" @click="navigatePassword">找回密码</el-button>
@@ -20,18 +20,35 @@
 </template>
 
 <script>
+  import service from '../../services/login/index';
+  
   export default {
     name: 'Login',
     data() {
       return {
-        email: 'linmanamanda@gmail.com',
-        password: 'linman2491'
+        userAccount: '',
+        userPassword: ''
       }
     },
     methods: {
+      login() {
+        service.login({ userAccount: this.userAccount, userPassword: this.userPassword })
+        .then(res => {
+          if (res.result) {
+
+          } else {
+
+          }
+        })
+        .catch(err => {
+          this.$message(err.message)
+        })
+      },
+      // 找回密码
       navigatePassword() {
         this.$router.push('/login/password')
       },
+      // 注册
       navigateRegister() {
         this.$router.push('/login/register')
       },
