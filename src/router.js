@@ -17,13 +17,14 @@ import LabView from './components/student/Lab.vue'
 import ProfessorIndexView from './components/professor/Index.vue'
 import ProfessorGradeIndexView from './components/professor/GradeIndex.vue'
 import ProfessorGradeDetailView from './components/professor/GradeDetail.vue'
-import ProfessorLabDetailView from './components/professor/LabDetail.vue'
+import ProfessorLabView from './components/professor/Lab.vue'
 
 // 管理员端
 import AdministratorIndexView from './components/administrator/Index.vue'
 import AdministratorStudentView from './components/administrator/Student.vue'
 import AdministratorTeacherView from './components/administrator/Teacher.vue'
 import AdministratorEquipmentView from './components/administrator/Equipment.vue'
+import AdministratorAnnouncementView from './components/administrator/Announcement.vue'
 
 export default [
   {
@@ -60,7 +61,7 @@ export default [
       },
       {
         path: 'lab',
-        component: ProfessorLabDetailView
+        component: ProfessorLabView
       },
     ],
   },
@@ -77,8 +78,12 @@ export default [
       },
       {
         path: 'equipment',
-        component: AdministratorEquipmentView
+        component: AdministratorEquipmentView,
       },
+      {
+        path: 'announcement',
+        component: AdministratorAnnouncementView,
+      }
     ],
   },
   {
