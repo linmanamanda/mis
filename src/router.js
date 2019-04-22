@@ -10,7 +10,7 @@ import StudentIndexView from './components/student/Index.vue'
 // import HomewordView from './components/student/Homeword.vue'
 // import GradeView from './components/student/Grade.vue'
 // import LessonView from './components/student/Lesson.vue'
-// import LabView from './components/student/Lab.vue'
+import LabView from './components/student/Lab.vue'
 // import AnnouncementView from './components/student/Announcement.vue'
 
 // 教师端
@@ -22,6 +22,8 @@ import ProfessorLabDetailView from './components/professor/LabDetail.vue'
 // 管理员端
 import AdministratorIndexView from './components/administrator/Index.vue'
 import AdministratorStudentView from './components/administrator/Student.vue'
+import AdministratorTeacherView from './components/administrator/Teacher.vue'
+import AdministratorEquipmentView from './components/administrator/Equipment.vue'
 
 export default [
   {
@@ -39,6 +41,11 @@ export default [
   {
     path: '/student', 
     component: StudentIndexView,
+    children: [{
+        path: 'lab',
+        component: LabView
+      },
+    ],
   },
   {
     path: '/professor', 
@@ -65,8 +72,12 @@ export default [
         component: AdministratorStudentView
       },
       {
-        path: 'student',
-        component: AdministratorStudentView
+        path: 'teacher',
+        component: AdministratorTeacherView
+      },
+      {
+        path: 'equipment',
+        component: AdministratorEquipmentView
       },
     ],
   },

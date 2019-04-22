@@ -14,4 +14,8 @@ export default {
   deleteStudent(userId) {
     return api.delete(`/user/user/${userId}`);
   },
+  // 老师信息列表
+  getTeachers() {
+    return api.get('/user/teacher');
+  },
 }
