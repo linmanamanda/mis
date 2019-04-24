@@ -4,9 +4,7 @@
     <el-table
       :data="list"
       style="width: 100%">
-      <el-table-column label="Id">
-        <template slot-scope="scope">{{ scope.row.noticeId }}</template>
-      </el-table-column>
+      <el-table-column type="index"></el-table-column>
       <el-table-column label="公告标题">
         <template slot-scope="scope">{{ scope.row.noticeUserName }}</template>
       </el-table-column>

@@ -3,15 +3,15 @@
     <el-container>
       <el-aside width="200px">
         <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :router="true">
-          <el-menu-item index="/student/detail">
+          <el-menu-item index="/professor/info">
             <i class="el-icon-menu"></i>
-            <span slot="title">信息修改</span>
+            <span slot="title">个人信息</span>
           </el-menu-item>
-          <el-menu-item index="/professor/grade">
+          <el-menu-item index="/professor/course">
             <i class="el-icon-document"></i>
             <span slot="title">我的课表</span>
           </el-menu-item>
-          <el-menu-item index="/professor/grade">
+          <el-menu-item index="/professor/score">
             <i class="el-icon-setting"></i>
             <span slot="title">成绩管理</span>
           </el-menu-item>
@@ -19,7 +19,7 @@
             <i class="el-icon-menu"></i>
             <span slot="title">实验室预约</span>
           </el-menu-item>
-          <el-menu-item index="/student/lesson">
+          <el-menu-item index="/professor/announcement">
             <i class="el-icon-document"></i>
             <span slot="title">发布公告</span>
           </el-menu-item>

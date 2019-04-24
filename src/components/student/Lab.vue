@@ -3,9 +3,7 @@
     <el-table
       :data="list"
       style="width: 100%">
-      <el-table-column label="Id">
-        <template slot-scope="scope">{{ scope.row.laboratoryId }}</template>
-      </el-table-column>
+      <el-table-column type="index"></el-table-column>
       <el-table-column label="实验室名称">
         <template slot-scope="scope">{{ scope.row.laboratoryName }}</template>
       </el-table-column>

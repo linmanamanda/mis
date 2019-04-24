@@ -3,23 +3,19 @@
     <el-container>
       <el-aside width="200px">
         <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :router="true">
-          <el-menu-item index="/student/detail">
+          <el-menu-item index="/student/info">
             <i class="el-icon-menu"></i>
             <span slot="title">个人信息</span>
-          </el-menu-item>
-          <el-menu-item index="/student/updation">
-            <i class="el-icon-document"></i>
-            <span slot="title">信息修改</span>
           </el-menu-item>
           <el-menu-item index="/student/homework">
             <i class="el-icon-setting"></i>
             <span slot="title">作业提交</span>
           </el-menu-item>
-          <el-menu-item index="/student/student">
+          <el-menu-item index="/student/score">
             <i class="el-icon-menu"></i>
             <span slot="title">成绩查询</span>
           </el-menu-item>
-          <el-menu-item index="/student/lesson">
+          <el-menu-item index="/student/course">
             <i class="el-icon-document"></i>
             <span slot="title">课表查询</span>
           </el-menu-item>

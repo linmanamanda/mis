@@ -2,9 +2,7 @@
   <el-table
     :data="list"
     style="width: 100%">
-    <el-table-column label="Id">
-      <template slot-scope="scope">{{ scope.row.userId }}</template>
-    </el-table-column>
+    <el-table-column type="index"></el-table-column>
     <el-table-column label="姓名">
       <template slot-scope="scope">{{ scope.row.userName }}</template>
     </el-table-column>
