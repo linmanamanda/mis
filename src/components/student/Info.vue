@@ -1,33 +1,31 @@
 <template>
-  <div class="login">
-    <h1 class="title">实验室管理系统</h1>
-    <el-form label-width="80px">
-      <el-form-item label="账号">
-        <el-input v-model="userAccount"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="userPassword" type="password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" style="width: 100%;" @click="login">登录</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="text" @click="navigatePassword">找回密码</el-button>
-        <el-button type="text" @click="navigateRegister">注册</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+  <el-form label-position="right">
+    <el-form-item label="名字">
+      <el-input v-model="userName"></el-input>
+    </el-form-item>
+    <el-form-item label="性别">
+      <el-input v-model="userGender"></el-input>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
   import service from '../../services/login/index';
   
   export default {
-    name: 'Login',
+    name: 'Info',
     data() {
       return {
-        userAccount: '',
-        userPassword: ''
+        userClassName: "1502",
+        userCollegeName: "计算机科学与技术学院",
+        userBirthplace: "安徽省",
+        userMajorName: "智能科学与技术",
+        userAccount: "xs173657",
+        userGender: "男",
+        userEmail: "qwer@xx.com",
+        userEnterSchoolTime: "21198121164518",
+        userName: "小王",
+        userPhotoUrl: "xxxxxx"
       }
     },
     methods: {
