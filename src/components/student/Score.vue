@@ -15,38 +15,41 @@
   </el-table>
 </template>
 
-<style>
-  .demo-table-expand {
-    font-size: 0;
-  }
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
-</style>
-
 <script>
-  export default {
-    data() {
-      return {
-        list: [
-          {
-            "courseName": "《大学物理下》",
-            "scoreFinal": "80",
-            "hasScore": true,
-            "scoreNormal": "71"
-          },
-          {
-              "courseName": "《线性代数》",
-              "hasScore": false
-          }
-        ],
-      }
+import service from '../../services/student/score';
+
+export default {
+  data() {
+    return {
+      list: [
+        {
+          "courseName": "《大学物理下》",
+          "scoreFinal": "80",
+          "hasScore": true,
+          "scoreNormal": "71"
+        },
+        {
+            "courseName": "《线性代数》",
+            "hasScore": false
+        }
+      ],
     }
-  }
+  },
+  mounted() {
+    this.fetchList();
+  },
+  methods: {
+    fetchList() {
+      return service.getScores()
+      .then(res => {
+        if (res.result) {
+          this.list = res.data;
+        } else {
+          this.$message({ message: res.msg, type: 'error' });
+        }
+      })
+      .catch(err => { console.log(err) })
+    },
+  },
+}
 </script>

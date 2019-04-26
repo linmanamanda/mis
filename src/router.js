@@ -32,16 +32,14 @@ export default [
   {
     path: '/login', 
     component: LoginView,
-    children: [
-      {
-        path: 'register',
-        component: RegisterView,
-      },
-      {
-        path: 'password',
-        component: PasswordView,
-      },
-    ]
+  },
+  {
+    path: '/register', 
+    component: RegisterView,
+  },
+  {
+    path: '/password', 
+    component: PasswordView,
   },
   {
     path: '/student', 

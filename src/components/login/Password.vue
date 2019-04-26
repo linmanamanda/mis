@@ -1,83 +1,112 @@
 <template>
   <div class="password">
-    <el-row>
-      <el-col :span="18" :offset="6">
-        <el-card shadow="always" class="box-card">
-          <div slot="header" class="clearfix">
-            <span>找回密码</span>
-          </div>
-          <el-form label-width="80px" label-position="left" ref="ruleForm" status-icon :rules="rules">
-            <el-form-item label="账号" >
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱">
-              <el-input v-model="form.email" type="password"></el-input>
-            </el-form-item>
-            <el-form-item label="新密码" prop="rules.pass">
-              <el-input v-model="form.password"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="rules.checkPass">
-              <el-input v-model="form.checkPassword" type="password"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary">提交</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
+    <el-card shadow="always" class="box-card">
+      <div slot="header" class="clearfix">
+        <span>找回密码</span>
+      </div>
+      <el-form :model="formData" :rules="rules" label-width="80px" label-position="left" ref="ruleForm" status-icon>
+        <el-form-item label="账号" prop="userAccount">
+          <el-input v-model="formData.userAccount"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="userEmail">
+          <el-input v-model="formData.userEmail"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="userPassword">
+          <el-input v-model="formData.userPassword" type="password"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="userPasswordAgain">
+          <el-input v-model="formData.userPasswordAgain" type="password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" :loading="isLoading" @click="save">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'Password',
-    data() {
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (this.form.checkPassword !== '') {
-            this.$refs.ruleForm.validateField('checkPass');
-          }
-          callback();
+import service from '../../services/login/password';
+
+export default {
+  name: 'Password',
+  data() {
+    var validatePass = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入密码'));
+      } else {
+        if (this.formData.userPasswordAgain) {
+          this.$refs.ruleForm.validateField('userPasswordAgain');
         }
-      };
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.ruleForm.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
-      return {
-        form: {
-          name: '',
-          email: '',
-          password: '',
-          checkPassword: '',
-        },
-        rules: {
-          pass: [
-            { validator: validatePass, trigger: 'blur' }
-          ],
-          checkPass: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-        }
+        callback();
       }
-    },
-    methods: {
-      
+    };
+    var validatePassAgain = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.formData.userPassword) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
+
+    return {
+      formData: {
+        userAccount: '',
+        userEmail: '',
+        userPassword: '',
+        userPasswordAgain: '',
+      },
+      rules: {
+        userAccount: [
+          { required: true, message: '请输入账号', trigger: 'blur' },
+        ],
+        userEmail: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+        ],
+        userPassword: [
+          { required: true, validator: validatePass, trigger: 'blur' }
+        ],
+        userPasswordAgain: [
+          { required: true, validator: validatePassAgain, trigger: 'blur' }
+        ],
+      },
+      isLoading: false,
     }
-  }  
+  },
+  methods: {
+    save() {
+      this.$refs.ruleForm.validate()
+      .then(() =>{
+        const { userAccount, userEmail, userPassword } = this.formData;
+        this.isLoading = true;
+        
+        return service.password({ userAccount, userEmail, userPassword })
+      })
+      .then(res => {
+        if (res.result) {
+          this.$router.push('/login');
+        } else {
+          this.$message({ message: res.msg, type: 'error' });
+        }
+      })
+      .catch(err => { console.log(err) })
+      .then(() => { this.isLoading = false });
+    },
+  }
+}  
 </script>
 
 <style scoped>
-  .password {
-    margin-top: 160px;
+  .el-card {
+    height: 400px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto auto auto auto;
   }
 
   .text {

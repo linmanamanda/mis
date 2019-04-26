@@ -1,70 +1,99 @@
 <template>
-  <div class="login">
-    <h1 class="title">实验室管理系统</h1>
-    <el-form label-width="80px">
-      <el-form-item label="账号">
-        <el-input v-model="userAccount"></el-input>
+  <el-card shadow="always" class="box-card">
+    <div slot="header" style="text-align: center; font-size: 24px;">
+      <span>实验室管理系统</span>
+    </div>
+    <el-form :model="formData" :rules="rules" label-width="80px" label-position="left" ref="ruleForm" status-icon>
+      <el-form-item label="账号" prop="userAccount">
+        <el-input v-model="formData.userAccount"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="userPassword" type="password"></el-input>
+      <el-form-item label="密码" prop="userPassword">
+        <el-input v-model="formData.userPassword" type="password"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" style="width: 100%;" @click="login">登录</el-button>
+      <el-form-item style="text-align: right;">
+        <el-button type="primary" @click="login" style="width: 100%;">登录</el-button>
       </el-form-item>
-      <el-form-item>
+      </el-form-item>
+      <el-form-item style="text-align: right;">
         <el-button type="text" @click="navigatePassword">找回密码</el-button>
         <el-button type="text" @click="navigateRegister">注册</el-button>
       </el-form-item>
     </el-form>
-  </div>
+  </el-card>
 </template>
 
 <script>
-  import service from '../../services/login/index';
-  
-  export default {
-    name: 'Login',
-    data() {
-      return {
+import service from '../../services/login/index';
+
+export default {
+  name: 'Login',
+  data() {
+    return {
+      formData: {
         userAccount: '',
-        userPassword: ''
-      }
-    },
-    methods: {
-      login() {
-        service.login({ userAccount: this.userAccount, userPassword: this.userPassword })
-        .then(res => {
-          if (res.result) {
-
-          } else {
-
-          }
-        })
-        .catch(err => {
-          this.$message(err.message)
-        })
+        userPassword: '',
       },
-      // 找回密码
-      navigatePassword() {
-        this.$router.push('/login/password')
-      },
-      // 注册
-      navigateRegister() {
-        this.$router.push('/login/register')
+      rules: {
+        userAccount: [
+          { required: true, message: '请输入账号', trigger: 'blur' },
+        ],
+        userPassword: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
       },
     }
-  }  
+  },
+  methods: {
+    login() {
+      const { userAccount, userPassword } = this.formData;
+      console.log(userAccount)
+      
+      this.$refs.ruleForm.validate()
+      .then(() => {
+        return service.login({ userAccount, userPassword });
+      })
+      .then(res => {
+        if (res.result) {
+          const role = userAccount.substr(0, 2);
+          if (role === 'xs') {
+            this.$router.push('/student/score');
+          } else if (role === 'ls') {
+            this.$router.push('/professor/info');
+          } else {
+            this.$router.push('/student/info');
+          }
+
+        } else {
+          this.$message({ message: res.msg, type: 'error' });
+        }
+      })
+      .catch(err => { console.log(err) })
+      .then(() => { this.isLoading = false });
+    },
+    // 找回密码
+    navigatePassword() {
+      this.$router.push('/password')
+    },
+    // 注册
+    navigateRegister() {
+      this.$router.push('/register')
+    },
+  }
+}  
 </script>
 
 <style scoped>
-.login {
+.el-card {
+  width: 600px;
+  height: 340px;
   position: absolute;
   left: 0;
   right: 0;
-  width: 400px;
-  padding: 35px 35px 15px 35px;
-  margin: 120px auto;
+  top: 0;
+  bottom: 0;
+  margin: 140px auto auto auto;
 }
+
 .title {
   margin: 0px auto 40px auto;
   font-size: 26px;
