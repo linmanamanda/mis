@@ -56,7 +56,7 @@ export default {
         if (res.result) {
           const role = userAccount.substr(0, 2);
           if (role === 'xs') {
-            this.$router.push('/student/score');
+            this.$router.push('/student/info');
           } else if (role === 'ls') {
             this.$router.push('/professor/info');
           } else {

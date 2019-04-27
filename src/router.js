@@ -47,7 +47,7 @@ export default [
     children: [
       {
         path: 'info',
-        component: StudentIndexView,
+        component: StudentInfoView,
       },
       {
         path: 'homework',

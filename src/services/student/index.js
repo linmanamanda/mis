@@ -6,16 +6,24 @@ export default {
   getDetail() {
     return api.get('/user/user');
   },
-  // 获取实验室列表
-  getLabs() {
-    return api.get('/laboratory/laboratory');
+  // 获取个人信息（用户登陆后）
+  updateDetail(params) {
+    return api.put('/user/user', params);
   },
-  // 通过实验室ID获取设备列表
-  getEquipments(laboratoryId) {
-    return api.get(`/device/device/${laboratoryId}`);
+  // 获取所有籍贯列表
+  getBirthPlace() {
+    return api.get('/birthplace/birthplace');
   },
-  // 添加反馈（用户登录后）
-  addFeedback(params) {
-    return api.post('/suggest/suggest', params);
+  // 获取所有学院信息
+  getCollege() {
+    return api.get('/class/college');
+  },
+  // 通过学院ID获取专业列表
+  getMajor(collegeId) {
+    return api.get(`/class/major/${collegeId}`);
+  },
+  // 通过专业ID获取班级列表
+  getClass(majorId) {
+    return api.get(`/class/class/${majorId}`);
   },
 }

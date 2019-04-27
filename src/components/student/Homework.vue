@@ -28,26 +28,13 @@
 </template>
 
 <script>
-import service from '../../services/homework/index';
+import service from '../../services/student/homework';
 
 export default {
   name: 'Homework',
   data() {
     return {
-      list: [
-        {
-            "courseName": "《大学物理下》",
-            "laboratoryName": "多媒体实验室",
-            "laboratoryNumber": "S011",
-            "courseId": 2
-        },
-        {
-            "courseName": "《线性代数》",
-            "laboratoryName": "信息安全实验室01",
-            "laboratoryNumber": "S021",
-            "courseId": 6
-        }
-      ],
+      list: [],
       fileList: [],
     }
   },
@@ -56,7 +43,7 @@ export default {
   },
   methods: {
     fetchHomeworks() {
-      service.getHomeworks()
+      return service.getHomeworks()
       .then(res => {
         if (res.result) {
           this.list = res.data;

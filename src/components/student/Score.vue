@@ -21,18 +21,7 @@ import service from '../../services/student/score';
 export default {
   data() {
     return {
-      list: [
-        {
-          "courseName": "《大学物理下》",
-          "scoreFinal": "80",
-          "hasScore": true,
-          "scoreNormal": "71"
-        },
-        {
-            "courseName": "《线性代数》",
-            "hasScore": false
-        }
-      ],
+      list: [],
     }
   },
   mounted() {

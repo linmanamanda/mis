@@ -36,9 +36,9 @@
           <el-select v-model="feedBackForm.suggestDeviceId">
             <el-option v-for="item in feedBackForm.equipments" :key="item.suggestDeviceId" :label="item.deviceName" :value="item.deviceId"></el-option>
           </el-select>
-        </el-form-item v-model="feedBackForm.suggestContent">
+        </el-form-item>
         <el-form-item label="反馈内容">
-          <el-input type="textarea"></el-input>
+          <el-input type="textarea" v-model="feedBackForm.suggestContent"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -50,43 +50,17 @@
 </template>
 
 <script>
-import service from '../../services/student/index';
+import service from '../../services/student/lab';
 
 export default {
   name: 'Lab',
   data() {
     return {
-      list: [
-        {
-            "laboratoryIdle": false,
-            "laboratoryId": 1,
-            "laboratoryName": "多媒体实验室",
-            "laboratoryNumber": "S011"
-        },
-        {
-            "laboratoryIdle": true,
-            "laboratoryId": 2,
-            "laboratoryName": "大数据实验室01",
-            "laboratoryNumber": "S012"
-        },
-      ],
+      list: [],
       dialogFormVisible: false,
       feedBackForm: {
         lab: '',
-        equipments: [
-          {
-              "deviceId": 1,
-              "deviceName": "PC1",
-              "deviceNumber": "X01",
-              "deviceStatus": "正常"
-          },
-          {
-              "deviceId": 2,
-              "deviceName": "PC2",
-              "deviceNumber": "X02",
-              "deviceStatus": "正常"
-          },
-        ],
+        equipments: [],
         suggestDeviceId: '',
         suggestContent: '',
       },
@@ -97,7 +71,7 @@ export default {
   },
   methods: {
     fetchLabs() {
-      service.getLabs()
+      return service.getLabs()
       .then(res => {
         if (res.result) {
           this.list = res.data;

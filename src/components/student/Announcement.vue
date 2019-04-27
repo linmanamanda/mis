@@ -43,26 +43,29 @@
 </style>
 
 <script>
-  export default {
-    data() {
-      return {
-        list: [
-          {
-              "noticeContent": "这里是关于计算机的相关事宜，请同学们注意这个通知，并在后天内完成！",
-              "noticeUserName": "小李",
-              "noticePublishTime": "1555567673675",
-              "noticeId": 2,
-              "noticeTitle": "《关于计算机上课安排通知》"
-          },
-          {
-              "noticeContent": "这里是关于选课的相关事宜，请同学们注意这个通知，并在后天内完成！",
-              "noticeUserName": "小李",
-              "noticePublishTime": "1555567701176",
-              "noticeId": 3,
-              "noticeTitle": "《关于选课通知》"
-          },
-        ],
-      }
+import service from '../../services/student/announcement';
+
+export default {
+  data() {
+    return {
+      list: [],
     }
-  }
+  },
+  mounted() {
+    this.fetchList();
+  },
+  methods: {
+    fetchList() {
+      return service.getAnnouncement()
+      .then(res => {
+        if (res.result) {
+          this.list = res.data;
+        } else {
+          this.$message({ message: res.msg, type: 'error' });
+        }
+      })
+      .catch(err => { console.log(err) })
+    },
+  },
+}
 </script>
