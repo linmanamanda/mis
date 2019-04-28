@@ -18,34 +18,25 @@
     <el-table-column label="籍贯">
       <template slot-scope="scope">{{ scope.row.userBirthplaceName }}</template>
     </el-table-column>
+    <el-table-column label="操作">
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          type="danger"
+          @click="deleteProfessor(scope.row.userId, scope.$index)">删除</el-button>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
 <script>
-import service from '../../services/administrator/index';
+import service from '../../services/administrator/professor';
 
 export default {
   name: 'Teacher',
   data() {
     return {
-      list: [
-        {
-            "userBirthplaceName": "北京市",
-            "userAccount": "ls182647",
-            "userGender": "男",
-            "userEmail": "1852@163.com",
-            "userName": "王老师",
-            "userId": 2
-        },
-        {
-            "userBirthplaceName": "河北省",
-            "userAccount": "ls188965",
-            "userGender": "女",
-            "userEmail": "22@33.com",
-            "userName": "彭老师",
-            "userId": 3
-        }
-      ],
+      list: [],
     }
   },
   mounted() {
@@ -53,10 +44,18 @@ export default {
   },
   methods: {
     fetchTeachers() {
-      service.getTeachers()
+      return service.getTeachers()
       .then(res => {
         if (res.result) {
           this.list = res.data;
+        }
+      })
+    },
+    deleteProfessor(userId, index) {
+      return service.deleteProfessor(userId)
+      .then(res => {
+        if (res.result) {
+          this.list.splice(index, 1);
         }
       })
     },

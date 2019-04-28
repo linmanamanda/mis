@@ -41,9 +41,7 @@
         
         <el-main>
           <transition>
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
+            <router-view></router-view>
           </transition>
         </el-main>
       </el-container>

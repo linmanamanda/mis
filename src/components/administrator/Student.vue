@@ -30,43 +30,21 @@
 </template>
 
 <script>
-import service from '../../services/administrator/index';
+import service from '../../services/administrator/student';
 
 export default {
   name: 'Student',
   data() {
     return {
-      list: [
-        {
-            "userClassName": "1502",
-            "userCollegeName": "计算机科学与技术学院",
-            "userBirthplaceName": "河南省",
-            "userMajorName": "智能科学与技术",
-            "userAccount": "xs173657",
-            "userGender": "女",
-            "userEmail": "xxx@xx.com",
-            "userEnterSchoolTime": "2651216132312",
-            "userName": "小李",
-            "userId": 1
-        },
-        {
-            "userClassName": "1502",
-            "userCollegeName": "计算机科学与技术学院",
-            "userBirthplaceName": "浙江省",
-            "userMajorName": "计算机科学与技术",
-            "userAccount": "xs186523",
-            "userGender": "女",
-            "userEmail": "xx@66.com",
-            "userEnterSchoolTime": "1812131661132",
-            "userName": "小张",
-            "userId": 4
-        }
-      ],
+      list: [],
     }
   },
+  mounted() {
+    this.fetchStudent();
+  },
   methods: {
-    fetchStudetn() {
-      service.getStudents()
+    fetchStudent() {
+      return service.getStudents()
       .then(res => {
         if (res.result) {
           this.list = res.data;
@@ -74,8 +52,7 @@ export default {
       })
     },
     setTeacher(userId, index) {
-      this.list.splice(index, 1);
-      service.setTeacher(userId)
+      return service.setTeacher(userId)
       .then(res => {
         if (res.result) {
           this.list.splice(index, 1);
@@ -83,7 +60,7 @@ export default {
       })
     },
     deleteStudent(userId, index) {
-      service.deleteStudent(userId)
+      return service.deleteStudent(userId)
       .then(res => {
         if (res.result) {
           this.list.splice(index, 1);

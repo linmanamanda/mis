@@ -49,37 +49,29 @@
 </style>
 
 <script>
-  export default {
-    data() {
-      return {
-        list: [
-          {
-              "courseName": "《大学物理下》",
-              "scheduleList": [
-                  {
-                      "beginTime": "1555587062325",
-                      "endTime": "1555597062325"
-                  },
-                  {
-                      "beginTime": "1555589062325",
-                      "endTime": "1555590062325"
-                  }
-              ],
-              "laboratoryId": 1,
-              "laboratoryName": "多媒体实验室",
-              "laboratoryNumber": "S011",
-              "courseId": 2
-          },
-          {
-              "courseName": "《线性代数》",
-              "scheduleList": [],
-              "laboratoryId": 4,
-              "laboratoryName": "信息安全实验室01",
-              "laboratoryNumber": "S021",
-              "courseId": 6
-          }
-        ],
-      }
+import service from '../../services/professor/course';
+
+export default {
+  data() {
+    return {
+      list: [],
     }
-  }
+  },
+  mounted() {
+    this.fetchList();
+  },
+  methods: {
+    fetchList() {
+      return service.getCourse()
+      .then(res => {
+        if (res.result) {
+          this.list = res.data;
+        } else {
+          this.$message({ message: res.msg, type: 'error' });
+        }
+      })
+      .catch(err => { console.log(err) })
+    },
+  },
+}
 </script>

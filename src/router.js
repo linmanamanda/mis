@@ -23,7 +23,7 @@ import ProfessorAnnouncementView from './components/professor/Announcement.vue'
 // 管理员端
 import AdministratorIndexView from './components/administrator/Index.vue'
 import AdministratorStudentView from './components/administrator/Student.vue'
-import AdministratorTeacherView from './components/administrator/Teacher.vue'
+import AdministratorTeacherView from './components/administrator/Professor.vue'
 import AdministratorEquipmentView from './components/administrator/Equipment.vue'
 import AdministratorCourseView from './components/administrator/Course.vue'
 import AdministratorAnnouncementView from './components/administrator/Announcement.vue'

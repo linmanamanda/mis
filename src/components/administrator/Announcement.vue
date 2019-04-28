@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import service from '../../services/announcement/index';
+import service from '../../services/administrator/announcement';
 import moment from 'moment';
 
 export default {
@@ -74,7 +74,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this)
+    this.fetchAnnouncement();
   },
   filters: {
     timestamp: function (value) {
@@ -100,7 +100,6 @@ export default {
         }
       })
     },
-    // 提交反馈
     addAnnouncement() {
       const { noticeTitle, noticeContent } = this;
 
