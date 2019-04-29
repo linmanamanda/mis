@@ -2,11 +2,42 @@
   <div class="Course">
     <div><el-button type="primary" style="margin-bottom: 16px;" @click="dialogFormVisible = true;">添加课程</el-button></div>
 
-
-
-
-    
-
+    <el-table
+      :data="list"
+      style="width: 100%">
+      <!-- <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="时间">
+              <div v-if="props.row.scheduleList.length == 0"><el-tag type="warning">待定</el-tag></div>
+              <div v-for="item in props.row.scheduleList">
+                <span>开始时间：<el-tag style="width: 140px;">{{ item.beginTime | timestampTransfer }}</el-tag></span>
+                <span style="margin-left: 16px;">结束时间：<el-tag style="width: 140px;">{{ item.endTime | timestampTransfer }}</el-tag></span>
+              </div>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column> -->
+      <el-table-column
+        type="index">
+      </el-table-column>
+      <el-table-column
+        label="课程名称"
+        prop="courseName">
+      </el-table-column>
+      <el-table-column
+        label="教师"
+        prop="courseTeacherName">
+      </el-table-column>
+      <el-table-column
+        label="实验室"
+        prop="courseLaboratoryName">
+      </el-table-column>
+      <el-table-column
+        label="实验室编号"
+        prop="courseLaboratoryNumber">
+      </el-table-column>
+    </el-table>
 
     <el-dialog title="添加课程" :visible.sync="dialogFormVisible">
       <el-form label-position="top">
@@ -119,7 +150,7 @@ export default {
     }
   },
   mounted() {
-    // this.fetchList();
+    this.fetchList();
     this.fetchTeacherList();
     this.fetchLabList();
     this.fetchCollege();
@@ -129,7 +160,18 @@ export default {
       return service.getCourse()
       .then(res => {
         if (res.result) {
-          this.list = res.data;
+          const list = res.data;
+          list.forEach(item => {
+            const courseClassNames = [];
+
+            for (let i = 0; i < item.collegeNames.length; i++) {
+              courseClassNames.push(item.collegeNames[i] + item.majorNames[i] + item.classNames[i]);
+            }
+
+            item.courseClassNames = courseClassNames;
+          });
+
+          this.list = list;
         } else {
           this.$message({ message: res.msg, type: 'error' });
         }

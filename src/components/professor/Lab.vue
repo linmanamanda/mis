@@ -35,24 +35,14 @@ export default {
   name: 'Lab',
   data() {
     return {
-      list: [
-        {
-            "laboratoryIdle": false,
-            "laboratoryId": 1,
-            "laboratoryName": "多媒体实验室",
-            "laboratoryNumber": "S011"
-        },
-        {
-            "laboratoryIdle": true,
-            "laboratoryId": 2,
-            "laboratoryName": "大数据实验室01",
-            "laboratoryNumber": "S012"
-        },
-      ],
+      list: [],
       laboratoryId: '',
       startTime: '',
       endTime: '',    
     }
+  },
+  mounted() {
+    this.fetchLab();
   },
   methods: {
     fetchLab() {

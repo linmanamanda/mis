@@ -1,99 +1,77 @@
 <template>
   <el-table
-    :data="tableData"
+    :data="list"
     style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
-        <el-form label-position="left" :inline="true" class="demo-table-expand">
-          <el-form-item label="作业下载">
-            <a href="">{{ props.row.name }}</a>
-          </el-form-item>
-          <el-form-item label="平时成绩">
-            <el-input autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="期末成绩">
-            <el-input autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item style="float: right;">
-            <el-button type="primary">提交</el-button>
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-form-item label="时间">
+            <div v-if="props.row.scheduleList.length == 0"><el-tag type="warning">待定</el-tag></div>
+            <div v-for="item in props.row.scheduleList">
+              <span>开始时间：<el-tag style="width: 140px;">{{ item.beginTime | timestampTransfer }}</el-tag></span>
+              <span style="margin-left: 16px;">结束时间：<el-tag style="width: 140px;">{{ item.endTime | timestampTransfer }}</el-tag></span>
+            </div>
           </el-form-item>
         </el-form>
       </template>
     </el-table-column>
     <el-table-column
-      label="学号"
-      prop="id">
+      type="index">
     </el-table-column>
     <el-table-column
-      label="姓名"
-      prop="name">
+      label="课程名称"
+      prop="courseName">
     </el-table-column>
     <el-table-column
-      label="状态"
-      prop="desc">
+      label="教室"
+      prop="laboratoryName">
     </el-table-column>
     <el-table-column
-      label="分数"
-      prop="desc">
+      label="教室编号"
+      prop="laboratoryNumber">
     </el-table-column>
   </el-table>
 </template>
-
-<script>
-
-export default {
-  name: 'GradeDetail',
-  data() {
-    return {
-      tableData: [{
-        id: '12987122',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987123',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987125',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987126',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }]
-    }
-  }
-}
-</script>
 
 <style>
   .demo-table-expand {
     font-size: 0;
   }
   .demo-table-expand label {
-    /*width: 90px;*/
+    width: 90px;
     color: #99a9bf;
   }
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
+    width: 50%;
   }
 </style>
 
+<script>
+import service from '../../services/professor/course';
+
+export default {
+  data() {
+    return {
+      list: [],
+    }
+  },
+  mounted() {
+    this.fetchList();
+  },
+  methods: {
+    fetchList() {
+      return service.getCourse()
+      .then(res => {
+        if (res.result) {
+          this.list = res.data;
+        } else {
+          this.$message({ message: res.msg, type: 'error' });
+        }
+      })
+      .catch(err => { console.log(err) })
+    },
+  },
+}
+</script>
