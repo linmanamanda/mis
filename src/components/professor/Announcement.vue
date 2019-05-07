@@ -6,7 +6,7 @@
       style="width: 100%">
       <el-table-column type="index"></el-table-column>
       <el-table-column label="公告标题">
-        <template slot-scope="scope">{{ scope.row.noticeUserName }}</template>
+        <template slot-scope="scope">{{ scope.row.noticeTitle }}</template>
       </el-table-column>
       <el-table-column label="发布人">
         <template slot-scope="scope">{{ scope.row.noticeUserName }}</template>
@@ -49,25 +49,10 @@ import service from '../../services/professor/announcement';
 import moment from 'moment';
 
 export default {
-  name: 'Lab',
+  name: 'Announcement',
   data() {
     return {
-      list: [
-        {
-            "noticeContent": "这里是关于计算机的相关事宜，请同学们注意这个通知，并在后天内完成！",
-            "noticeUserName": "小李",
-            "noticePublishTime": "1555567673675",
-            "noticeId": 2,
-            "noticeTitle": "《关于计算机上课安排通知》"
-        },
-        {
-            "noticeContent": "这里是关于选课的相关事宜，请同学们注意这个通知，并在后天内完成！",
-            "noticeUserName": "小李",
-            "noticePublishTime": "1555567701176",
-            "noticeId": 3,
-            "noticeTitle": "《关于选课通知》"
-        },
-      ],
+      list: [],
       dialogFormVisible: false,
       noticeTitle: '',
       noticeContent: '',
@@ -108,7 +93,7 @@ export default {
         if (res.result) {
           this.dialogFormVisible = false;
           this.$message({ message: '发布成功', type: 'success' });
-          // window.location.reload();
+          window.location.reload();
         }
       })
     },

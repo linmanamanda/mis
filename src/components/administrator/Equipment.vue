@@ -1,57 +1,60 @@
 <template>
   <div class="Lab">
-    <div><el-button type="primary" style="margin-bottom: 16px;" @click="fetchFeedbacks">查看反馈</el-button></div>
-    <el-table
-      :data="list"
-      style="width: 100%">
-      <el-table-column type="index"></el-table-column>
-      <el-table-column label="实验室名称">
-        <template slot-scope="scope">{{ scope.row.laboratoryName }}</template>
-      </el-table-column>
-      <el-table-column label="实验室编号">
-        <template slot-scope="scope">{{ scope.row.laboratoryNumber }}</template>
-      </el-table-column>
-      <el-table-column label="状态">
-        <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.laboratoryIdle">使用</el-tag>
-          <el-tag type="warning" v-else>未使用</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="fetchEquipments(scope.row.laboratoryId)">查看设备</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <el-dialog title="反馈列表" :visible.sync="feedbacksVisible">
-      <el-table
-        :data="feedbacks"
-        style="width: 100%">
-        <el-table-column prop="suggestDeviceName" label="设备名称"></el-table-column>
-        <el-table-column prop="suggestDeviceNumber" label="设备编号"></el-table-column>
-        <el-table-column
-          prop="suggestContent"
-          label="反馈内容"
-          width="180">
-        </el-table-column>
-        <el-table-column prop="suggestUserName" label="反馈人"></el-table-column>
-        <el-table-column label="反馈时间" width="180">
-          <template slot-scope="scope">
-            <span>{{ scope.row.suggestTime }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="deleteFeedback(scope.row.laboratoryId, scope.$index)">删除反馈</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-dialog>
+    <el-tabs>
+      <el-tab-pane label="实验室信息">
+        <el-table
+          :data="list"
+          style="width: 100%">
+          <el-table-column type="index"></el-table-column>
+          <el-table-column label="实验室名称">
+            <template slot-scope="scope">{{ scope.row.laboratoryName }}</template>
+          </el-table-column>
+          <el-table-column label="实验室编号">
+            <template slot-scope="scope">{{ scope.row.laboratoryNumber }}</template>
+          </el-table-column>
+          <el-table-column label="状态">
+            <template slot-scope="scope">
+              <el-tag type="success" v-if="scope.row.laboratoryIdle">使用</el-tag>
+              <el-tag type="warning" v-else>未使用</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="fetchEquipments(scope.row.laboratoryId)">查看设备</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="反馈信息">
+        <el-table
+          :data="feedbacks"
+          style="width: 100%">
+          <el-table-column type="index"></el-table-column>
+          <el-table-column prop="suggestDeviceName" label="设备名称"></el-table-column>
+          <el-table-column prop="suggestDeviceNumber" label="设备编号"></el-table-column>
+          <el-table-column
+            prop="suggestContent"
+            label="反馈内容"
+            width="180">
+          </el-table-column>
+          <el-table-column prop="suggestUserName" label="反馈人"></el-table-column>
+          <el-table-column label="反馈时间" width="180">
+            <template slot-scope="scope">
+              <span>{{ scope.row.suggestTime | timestampTransfer }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="deleteFeedback(scope.row.suggestId, scope.$index)">删除反馈</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
 
     <el-dialog title="设备列表" :visible.sync="equipmentsVisible">
       <el-table
@@ -105,13 +108,13 @@ export default {
       list: [],
       equipments: [],
       feedbacks: [],
-      feedbacksVisible: false,
       equipmentsVisible: false,
       equipmentStatus: "0",
     }
   },
   mounted() {
     this.fetchLabs();
+    this.fetchFeedbacks();
   },
   methods: {
     fetchLabs() {
@@ -164,6 +167,7 @@ export default {
       return service.deleteFeedback(suggestId)
       .then(res => {
         if (res.result) {
+          this.$message({ message: '删除成功', type: 'success' });
           this.feedbacks.splice(index, 1);
         } 
       })

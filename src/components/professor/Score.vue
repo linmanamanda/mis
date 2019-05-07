@@ -18,9 +18,8 @@
     <el-table-column
       type="index">
     </el-table-column>
-    <el-table-column
-      label="课程名称"
-      prop="courseName">
+    <el-table-column label="课程名称">
+      <template slot-scope="scope"><a @click="checkDetail(scope.row.courseId)">{{ scope.row.courseName }}</a></template>
     </el-table-column>
     <el-table-column
       label="教室"
@@ -71,6 +70,9 @@ export default {
         }
       })
       .catch(err => { console.log(err) })
+    },
+    checkDetail(courseId) {
+      this.$router.push(`/professor/score/${courseId}`);
     },
   },
 }

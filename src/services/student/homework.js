@@ -6,6 +6,9 @@ export default {
   getHomeworks() {
     return api.get('/work/course');
   },
+  uploadHomeworks(params) {
+    return api.post('/file/upload', params);
+  },
   // 提交作业（不含文件上传）（用户登陆后）
   postHomeworks(params) {
     return api.post('/work/work', params);

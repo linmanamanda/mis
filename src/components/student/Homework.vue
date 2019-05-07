@@ -16,9 +16,8 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :file-list="fileList">
+            action="http://62.234.57.192:8080/laboratory/file/upload"
+            on-success="postHomeworks">
             <el-button size="small" type="primary">选择文件</el-button>
           </el-upload>
         </template>
@@ -35,7 +34,6 @@ export default {
   data() {
     return {
       list: [],
-      fileList: [],
     }
   },
   mounted() {
@@ -50,6 +48,9 @@ export default {
         }
       })
     },
+    postHomeworks(response, file, fileList) {
+      console.log(response)
+    }
   }
 }
 </script>

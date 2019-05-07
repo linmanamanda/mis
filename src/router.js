@@ -16,6 +16,7 @@ import StudentAnnouncementView from './components/student/Announcement.vue'
 import ProfessorIndexView from './components/professor/Index.vue'
 import ProfessorInfoView from './components/professor/Info.vue'
 import ProfessorScoreView from './components/professor/Score.vue'
+import ProfessorScoreDetailView from './components/professor/ScoreDetail.vue'
 import ProfessorLabView from './components/professor/Lab.vue'
 import ProfessorCourseView from './components/professor/Course.vue'
 import ProfessorAnnouncementView from './components/professor/Announcement.vue'
@@ -86,6 +87,10 @@ export default [
       {
         path: 'score',
         component: ProfessorScoreView,
+      },
+      {
+        path: 'score/:course_id',
+        component: ProfessorScoreDetailView,
       },
       {
         path: 'lab',
