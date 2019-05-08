@@ -5,19 +5,17 @@
     <el-table
       :data="list"
       style="width: 100%">
-      <!-- <el-table-column type="expand">
+      <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="时间">
-              <div v-if="props.row.scheduleList.length == 0"><el-tag type="warning">待定</el-tag></div>
-              <div v-for="item in props.row.scheduleList">
-                <span>开始时间：<el-tag style="width: 140px;">{{ item.beginTime | timestampTransfer }}</el-tag></span>
-                <span style="margin-left: 16px;">结束时间：<el-tag style="width: 140px;">{{ item.endTime | timestampTransfer }}</el-tag></span>
+            <el-form-item label="班级">
+              <div v-for="item in props.row.courseClassNames">
+                <span>{{ item }}</span>
               </div>
             </el-form-item>
           </el-form>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column
         type="index">
       </el-table-column>
@@ -37,6 +35,14 @@
         label="实验室编号"
         prop="courseLaboratoryNumber">
       </el-table-column>
+      <el-table-column label="操作">
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          type="danger"
+          @click="triggerTime(scope.row.courseId)">添加上课时间</el-button>
+      </template>
+    </el-table-column>
     </el-table>
 
     <el-dialog title="添加课程" :visible.sync="dialogFormVisible">
@@ -72,7 +78,30 @@
       <div slot="footer" class="dialog-footer">
         <el-button>取消</el-button>
         <el-button type="primary" @click="addCourse">确定</el-button>
-        
+      </div>
+    </el-dialog>
+
+    <el-dialog title="添加上课时间" :visible.sync="timeFormVisible">
+      <el-form label-position="top">
+        <el-date-picker
+          v-model="timeForm.scheduleBeginTime"
+          type="datetime"
+          format="yyyy-MM-dd HH:mm"
+          value-format="timestamp"
+          placeholder="开始时间"
+          style="margin-right: 16px;">
+        </el-date-picker>
+        <el-date-picker
+          v-model="timeForm.scheduleEndTime"
+          type="datetime"
+          format="yyyy-MM-dd HH:mm"
+          value-format="timestamp"
+          placeholder="结束时间">
+        </el-date-picker>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button>取消</el-button>
+        <el-button type="primary" @click="addTime">确定</el-button>
       </div>
     </el-dialog>
   </div>  
@@ -97,38 +126,10 @@
 import service from '../../services/administrator/course';
 
 export default {
+  name: 'Course',
   data() {
     return {
-      list: [
-        {
-            "collegeNames": [
-                "计算机科学与技术学院",
-                "计算机科学与技术学院",
-                "计算机科学与技术学院",
-                "自动化学院",
-                "自动化学院"
-            ],
-            "courseName": "《大学物理上》",
-            "courseTeacherName": "王老师",
-            "courseLaboratoryName": "信息安全实验室02",
-            "courseLaboratoryNumber": "S022",
-            "classNames": [
-                "1501",
-                "1502",
-                "1502",
-                "1502",
-                "1503"
-            ],
-            "majorNames": [
-                "计算机科学与技术",
-                "智能科学与技术",
-                "空间信息与数字技术",
-                "自动化",
-                "测控技术与仪器"
-            ],
-            "courseId": 1
-        },
-      ],
+      list: [],
       teacherList: [],
       labList: [],
       dialogFormVisible: false,
@@ -147,6 +148,12 @@ export default {
       college: [],
       major: [],
       classes: [],
+      timeFormVisible: false,
+      timeForm: {
+        scheduleCourseId: '',
+        scheduleBeginTime: '',
+        scheduleEndTime: '',
+      },
     }
   },
   mounted() {
@@ -256,6 +263,20 @@ export default {
       .then(res => {
         if (res.result) {
           this.dialogFormVisible = false;
+          this.$message({ message: '添加成功', type: 'success' });
+          window.location.reload();
+        }
+      })
+    },
+    triggerTime(courseId) {
+      this.timeForm.scheduleCourseId = courseId;
+      this.timeFormVisible = true;
+    },
+    addTime() {
+      return service.addTime(this.timeForm)
+      .then(res => {
+        if (res.result) {
+          this.timeFormVisible = false;
           this.$message({ message: '添加成功', type: 'success' });
         }
       })

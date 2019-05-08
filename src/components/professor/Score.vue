@@ -50,38 +50,36 @@
               <el-button
                 size="mini"
                 v-if="!scope.row.isScore"
+                @click="triggerScore(scope.row.userId)"
                 >提交成绩</el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
+      <el-tab-pane label="成绩下载" name="download">
+        <el-button @click="fetchScoreDownloadURL">下载</el-button>
+      </el-tab-pane>
     </el-tabs>
 
     <el-dialog title="提交成绩" :visible.sync="dialogFormVisible">
       <el-form label-position="top">
-        <el-form-item label="实验室">
-          <el-select v-model="feedBackForm.lab" disabled>
-            <el-option :label="feedBackForm.lab" value=""></el-option>
-          </el-select>
+        <el-form-item label="作业下载">
+          <a style="cursor: pointer; color: #409EFF;" v-if="scoreForm.homeworkURL" @click="downloadHW(scoreForm.homeworkURL)">{{ scoreForm.homeworkURL }}</a>
+          <span v-else><el-tag type="warning">未提交</el-tag></span>
         </el-form-item>
-        <el-form-item label="设备编号">
-          <el-select v-model="feedBackForm.suggestDeviceId">
-            <el-option v-for="item in feedBackForm.equipments" :key="item.suggestDeviceId" :label="item.deviceName" :value="item.deviceId"></el-option>
-          </el-select>
+        <el-form-item label="平时成绩">
+          <el-input v-model="scoreForm.scoreNormal"></el-input>
         </el-form-item>
-        <el-form-item label="反馈内容">
-          <el-input v-model="feedBackForm.suggestContent"></el-input>
+        <el-form-item label="期末成绩">
+          <el-input v-model="scoreForm.scoreFinal"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button>取消</el-button>
-        <el-button type="primary" @click="submitFeedBack">确定</el-button>
+        <el-button type="primary" @click="submitScore">确定</el-button>
       </div>
     </el-dialog>
   </div>
-
-
-    
 </template>
 
 <style>
@@ -107,23 +105,16 @@ export default {
     return {
       tabIndex: 'course',
       list: [],
-      score: [
-        {
-            "score": 0,
-            "isScore": false,
-            "userAccount": "xs173651",
-            "userClassId": 2,
-            "userName": "小李",
-            "userId": 1
-        },
-      ],
+      score: [],
       dialogFormVisible: false,
-      feedBackForm: {
-        lab: '',
-        equipments: [],
-        suggestDeviceId: '',
-        suggestContent: '',
+      scoreForm: {
+        homeworkURL: '',
+        scoreNormal: '',
+        scoreFinal: '',
+        scoreCourseId: '',
+        scoreUserId: '',
       },
+      downloadURL: '',
     }
   },
   mounted() {
@@ -145,9 +136,56 @@ export default {
       return service.getScores(courseId)
       .then(res => {
         if (res.result) {
+          this.scoreForm.scoreCourseId = courseId;
           this.score = res.data;
           this.tabIndex = 'score';
         } 
+      })
+    },
+    triggerScore(userId) {
+      this.scoreForm.scoreUserId = userId;
+      this.fetchHomeworkURL();
+    },
+    submitScore() {
+      return service.setScore(this.scoreForm)
+      .then(res => {
+        if (res.result) {
+          this.$message({ message: '提交成功', type: 'success' });
+          this.dialogFormVisible = false;
+        } 
+      })
+    },
+    fetchScoreDownloadURL() {
+      return service.downloadScore()
+      .then(res => {
+        if (res.result) {
+          this.downloadScore(res.data);
+        } 
+      })
+    },
+    downloadScore(downloadURL) {
+      const metaType = downloadURL.split('.')[1];
+
+      return service.downloadFile({ workUrl: downloadURL })
+      .then(res => {
+        this.downloadFile(res, metaType)
+      })
+    },
+    fetchHomeworkURL() {
+      return service.getHomeworkURL(this.scoreForm.scoreCourseId, this.scoreForm.scoreUserId)
+      .then(res => {
+        if (res.result) {
+          this.scoreForm.homeworkURL = res.data.workUrl;
+          this.dialogFormVisible = true;
+        } 
+      })
+    },
+    downloadHW(downloadURL) {
+      const metaType = downloadURL.split('.')[1];
+
+      return service.downloadFile({ workUrl: downloadURL })
+      .then(res => {
+        this.downloadFile(res, metaType)
       })
     },
   },

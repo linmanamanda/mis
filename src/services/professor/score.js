@@ -12,7 +12,15 @@ export default {
   setScore(params) {
     return api.post(`/score/score`, params);
   },
+  getHomeworkURL(courseId, userId) {
+    return api.get(`/work/url/${courseId}/${userId}`);
+  },
   downloadScore() {
     return api.get(`/file/scoreExcel`);
+  },
+  downloadFile(params) {
+    return api.post(`/file/download`, params, {
+      responseType: 'blob',
+    });
   },
 }

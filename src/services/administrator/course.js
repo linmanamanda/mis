@@ -30,4 +30,8 @@ export default {
   addCourse(params) {
     return api.post('/course/course', params);
   },
+  // 添加上课时间
+  addTime(params) {
+    return api.post('/schedule/schedule', params);
+  },
 }

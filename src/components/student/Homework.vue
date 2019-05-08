@@ -17,8 +17,11 @@
         <template slot-scope="scope">
           <el-upload
             action="http://62.234.57.192:8080/laboratory/file/upload"
-            on-success="postHomeworks">
-            <el-button size="small" type="primary">选择文件</el-button>
+            :show-file-list="false"
+            :limit="1"
+            :before-upload="setHomeworkIndex(scope.$index)"
+            :on-success="postHomeworks">
+            <el-button size="small" type="primary">上传</el-button>
           </el-upload>
         </template>
       </el-table-column>
@@ -34,6 +37,7 @@ export default {
   data() {
     return {
       list: [],
+      index: -1,
     }
   },
   mounted() {
@@ -48,8 +52,24 @@ export default {
         }
       })
     },
-    postHomeworks(response, file, fileList) {
-      console.log(response)
+    setHomeworkIndex(index) {
+      this.index = index
+    },
+    postHomeworks(res) {
+      if (res.result) {
+        const params = {
+          workCourseId: this.list[this.index].courseId,
+          workUrl: res.data,
+        }
+
+        return service.postHomeworks(params)
+        .then(res => {
+          if (res.result) {
+            this.$message({ message: '上传成功', type: 'success' });
+            this.index = -1;
+          }
+        })
+      }
     }
   }
 }
