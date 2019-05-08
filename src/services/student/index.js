@@ -6,7 +6,7 @@ export default {
   getDetail() {
     return api.get('/user/user');
   },
-  // 获取个人信息（用户登陆后）
+  // 修改个人信息（用户登陆后）
   updateDetail(params) {
     return api.put('/user/user', params);
   },

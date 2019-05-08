@@ -1,27 +1,31 @@
 <template>
-  <div>
-    <el-form label-width="80px" label-position="left">
-      <el-form-item label="学号">
-        <span>{{ formData.userAccount }}</span>
-      </el-form-item>
-      <el-form-item label="姓名">
-        <span>{{ formData.userName }}</span>
-      </el-form-item>
-      <el-form-item label="性别">
-        <span>{{ formData.userGender }}</span>
-      </el-form-item>
-      <el-form-item label="籍贯">
-        <span>{{ formData.userBirthplaceId }}</span>
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <span>{{ formData.userEmail }}</span>
-      </el-form-item>
-      <el-form-item label="班级">
-        <span>{{ formData.userClassId }}</span>
-      </el-form-item>
-    </el-form>
-
-    <el-dialog title="修改信息" :visible.sync="dialogFormVisible">
+  <el-tabs v-model="tabIndex" @tab-click="tabSwitch">
+    <el-tab-pane label="查看" name="detail">
+      <el-form label-width="80px" label-position="left">
+        <el-form-item label="学号">
+          <span>{{ renderData.userAccount }}</span>
+        </el-form-item>
+        <el-form-item label="姓名">
+          <span>{{ renderData.userName }}</span>
+        </el-form-item>
+        <el-form-item label="性别">
+          <span>{{ renderData.userGender }}</span>
+        </el-form-item>
+        <el-form-item label="籍贯">
+          <span>{{ renderData.userBirthplace }}</span>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <span>{{ renderData.userEmail }}</span>
+        </el-form-item>
+        <el-form-item label="班级">
+          <span>{{ renderData.userCollegeName }} / {{ renderData.userMajorName }} / {{ renderData.userClassName }}</span>
+        </el-form-item>
+        <el-form-item label="入学时间">
+          <span>{{ renderData.userEnterSchoolTime | timestampTransfer }}</span>
+        </el-form-item>
+      </el-form>
+    </el-tab-pane>
+    <el-tab-pane label="编辑" name="edition">
       <el-form :model="formData" :rules="rules" label-width="80px" label-position="left" ref="ruleForm" status-icon>
         <el-form-item label="学号">
           <el-input v-model="formData.userAccount" disabled></el-input>
@@ -54,12 +58,21 @@
             <el-option v-for="item in classes" :key="item.classId" :label="item.className" :value="item.classId"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="入学时间" prop="userEnterSchoolTime">
+          <el-date-picker
+            v-model="formData.userEnterSchoolTime"
+            type="datetime"
+            format="yyyy-MM-dd HH:mm"
+            value-format="timestamp"
+            style="margin-right: 16px;">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item>
-          <el-button type="primary" :loading="isLoading" @click="save">提交</el-button>
+          <el-button type="primary" @click="save">保存</el-button>
         </el-form-item>
       </el-form>
-    </el-dialog>
-  </div>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
@@ -69,16 +82,28 @@ export default {
   name: 'Password',
   data() {
     return {
+      tabIndex: 'detail',
+      renderData: {
+        userName: '',
+        userAccount: '',
+        userGender: '',
+        userEmail: '',
+        userBirthplace: '',
+        userCollegeName: '', 
+        userMajorName: '', 
+        userClassName: '',
+        userEnterSchoolTime: '',
+      },
       formData: {
         userName: '',
         userAccount: '',
         userGender: '',
         userEmail: '',
-        userClassId: '',
         userBirthplaceId: '',
-        userEnterSchoolTime: '',
         collegeId: '',
         majorId: '',
+        userClassId: '',
+        userEnterSchoolTime: '',
       },
       rules: {
         userName: [
@@ -95,6 +120,9 @@ export default {
         ],
         userClassId: [
           { required: true, message: '请选择班级', trigger: 'blur' },
+        ],
+        userEnterSchoolTime: [
+          { required: true, message: '请选择入学时间', trigger: 'blur' },
         ],
       },
       birthPlace: [],
@@ -114,10 +142,40 @@ export default {
       return service.getDetail()
       .then(res => {
         if (res.result) {
-          this.formData = res.data;
-          this.formData.userGender = this.formData.userGender === '男' ? '0' : '1';
+          const { userAccount, userName, userGender, userBirthplace, userEmail, userCollegeName, userMajorName, userClassName, userEnterSchoolTime  } = res.data;
+
+          this.renderData = {
+            userName,
+            userAccount,
+            userGender,
+            userEmail,
+            userBirthplace,
+            userCollegeName, 
+            userMajorName, 
+            userClassName,
+            userEnterSchoolTime,
+          };
         }
       })
+    },
+    tabSwitch() {
+      if (this.tabIndex === 'edition') {
+        this.renderEdition();
+      }
+    },
+    renderEdition() {
+      const { userAccount, userName, userGender, userEmail, userEnterSchoolTime  } = this.renderData;
+      this.formData = {
+        userName,
+        userAccount,
+        userGender: userGender === '男' ? '0' : '1',
+        userEmail,
+        userBirthplaceId: '',
+        collegeId: '',
+        majorId: '',
+        userClassId: '',
+        userEnterSchoolTime,
+      };
     },
     fetchBirthPlace() {
       return service.getBirthPlace()
@@ -169,21 +227,17 @@ export default {
     save() {
       this.$refs.ruleForm.validate()
       .then(() =>{
-        const userEnterSchoolTime = Date.now();
-        const { userName, userAccount, userEmail, userPassword, userGender, userClassId, userBirthplaceId } = this.formData;
-        this.isLoading = true;
+        const { userName, userEmail, userGender, userClassId, userBirthplaceId, userEnterSchoolTime } = this.formData;
         
-        return service.register({ userName, userAccount, userEmail, userPassword, userGender, userClassId, userBirthplaceId, userEnterSchoolTime });
+        return service.updateDetail({ userName, userEmail, userGender, userClassId, userBirthplaceId, userEnterSchoolTime });
       })
       .then(res => {
         if (res.result) {
-          this.$router.push('/login');
-        } else {
-          this.$message({ message: res.msg, type: 'error' });
+          this.$message({ message: '修改成功', type: 'success' });
+          window.location.reload();
         }
       })
       .catch(err => { console.log(err) })
-      .then(() => { this.isLoading = false });
     },
   }
 }  
@@ -199,6 +253,10 @@ export default {
     top: 0;
     bottom: 0;
     margin: auto auto auto auto;
+  }
+
+  .el-form {
+    width: 730px !important;
   }
 
   .text {

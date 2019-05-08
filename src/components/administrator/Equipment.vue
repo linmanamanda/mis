@@ -49,6 +49,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                type="danger"
                 @click="deleteFeedback(scope.row.suggestId, scope.$index)">删除反馈</el-button>
             </template>
           </el-table-column>
@@ -72,24 +73,32 @@
         </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <span v-if="!scope.row.isEditing">
-              <el-tag>{{ scope.row.deviceStatus }}</el-tag>
-              <a style="margin-left: 8px; cursor: pointer;" @click="updateEquipment(scope.row.deviceId, scope.$index)">修改</a>
+            <span v-if="equipmentIndex !== scope.$index">
+              <el-tag v-if="scope.row.deviceStatus == '正常'">{{ scope.row.deviceStatus }}</el-tag>
+              <el-tag v-if="scope.row.deviceStatus == '故障'" type="warning">{{ scope.row.deviceStatus }}</el-tag>
+              <el-tag v-if="scope.row.deviceStatus == '报废'" type="danger">{{ scope.row.deviceStatus }}</el-tag>
             </span>
-            <span v-else>
-              <el-select v-model="equipmentStatus">
-                <el-option label="正常" value="0"></el-option>
-                <el-option label="故障" value="1"></el-option>
-                <el-option label="报废" value="1"></el-option>
-              </el-select>
-              <a style="margin-left: 8px; cursor: pointer;" @click="updateEquipment(scope.row.deviceId, scope.$index)">保存</a>
-            </span>
+            <el-select v-else v-model="equipmentStatus">
+              <el-option label="正常" value="0"></el-option>
+              <el-option label="故障" value="1"></el-option>
+              <el-option label="报废" value="2"></el-option>
+            </el-select>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
+            <el-button 
+              v-if="equipmentIndex !== scope.$index"
+              size="mini" 
+              @click="equipmentIndex = scope.$index">修改</i></el-button>
+            <el-button 
+              v-else
+              size="mini" 
+              type="warning"
+              @click="updateEquipment(scope.row.deviceId, scope.$index)">保存</i></el-button>
             <el-button
               size="mini"
+              type="danger"
               @click="deleteEquipments(scope.row.deviceId, scope.$index)">删除设备</el-button>
           </template>
         </el-table-column>
@@ -110,6 +119,7 @@ export default {
       feedbacks: [],
       equipmentsVisible: false,
       equipmentStatus: "0",
+      equipmentIndex: -1,
     }
   },
   mounted() {
@@ -138,13 +148,23 @@ export default {
       })
     },
     updateEquipment(deviceId, index) {
-      const equipment = this.equipments[index];
-      if (equipment.isEditing) {
+      const { equipmentStatus } = this;
+      return service.updateEquipments(deviceId, equipmentStatus)
+      .then(res => {
+        if (res.result) {
+          this.$message({ message: '修改成功', type: 'success' });
+          if (equipmentStatus == 0) {
+            this.equipments[index].deviceStatus = '正常';
+          } else if (equipmentStatus == 1) {
+            this.equipments[index].deviceStatus = '故障';
+          } else{
+            this.equipments[index].deviceStatus = '报废';
+          }
+          this.equipmentIndex = -1;
+          this.equipmentStatus = '0';
+        } 
+      })
 
-        equipment.isEditing = false;
-      } else {
-        equipment.isEditing = true;
-      }
     },
     deleteEquipments(deviceId, index) {
       return service.deleteEquipment(deviceId)
