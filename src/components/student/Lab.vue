@@ -42,7 +42,6 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button>取消</el-button>
         <el-button type="primary" @click="submitFeedBack">确定</el-button>
       </div>
     </el-dialog>

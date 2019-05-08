@@ -60,7 +60,7 @@ export default {
           } else if (role === 'ls') {
             this.$router.push('/professor/info');
           } else {
-            this.$router.push('/student/info');
+            this.$router.push('/administrator/student');
           }
 
         } else {
