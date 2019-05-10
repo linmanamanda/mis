@@ -17,6 +17,11 @@ Vue.filter('timestampTransfer', (value) => {
   return moment(value - '0').format('YYYY-MM-DD HH:mm:ss');  
 });
 
+Vue.filter('float2', (value) => {
+  if (!value) return '0.00'
+  return parseFloat(value).toFixed(2);  
+});
+
 Vue.prototype.downloadFile = function(data, metaType){
   if (!data) {
     return

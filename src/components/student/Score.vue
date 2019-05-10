@@ -7,10 +7,16 @@
       <template slot-scope="scope">{{ scope.row.courseName }}</template>
     </el-table-column>
     <el-table-column label="平时成绩">
-      <template slot-scope="scope">{{ scope.row.hasScore ? scope.row.scoreNormal : '待定' }}</template>
+      <template slot-scope="scope">
+        <span v-if="scope.row.hasScore">{{ scope.row.scoreNormal | float2 }}</span>
+        <span v-else>待定</span>
+      </template>
     </el-table-column>
     <el-table-column label="期末成绩">
-      <template slot-scope="scope">{{ scope.row.hasScore ? scope.row.scoreFinal : '待定' }}</template>
+      <template slot-scope="scope">
+        <span v-if="scope.row.hasScore">{{ scope.row.scoreFinal | float2 }}</span>
+        <span v-else>待定</span>
+      </template>
     </el-table-column>
   </el-table>
 </template>

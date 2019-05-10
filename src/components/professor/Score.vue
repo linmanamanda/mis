@@ -43,7 +43,10 @@
             <template slot-scope="scope"><el-tag :type="!scope.row.isScore ? 'warning' : ''">{{ scope.row.isScore ? '已打分' : '未打分' }}</el-tag></template>
           </el-table-column>
           <el-table-column label="成绩">
-            <template slot-scope="scope">{{ scope.row.isScore ? scope.row.score : '-' }}</template>
+            <template slot-scope="scope">
+              <span v-if="scope.row.isScore">{{ scope.row.score | float2 }}</span>
+              <span v-else>-</span>
+            </template>
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
