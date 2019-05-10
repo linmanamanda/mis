@@ -29,6 +29,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="成绩列表" name="score">
+        <el-button type="primary" @click="fetchScoreDownloadURL">成绩下载</el-button>
         <el-table
           :data="score"
           style="width: 100%">
@@ -58,9 +59,6 @@
             </template>
           </el-table-column>
         </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="成绩下载" name="download">
-        <el-button @click="fetchScoreDownloadURL">下载</el-button>
       </el-tab-pane>
     </el-tabs>
 
