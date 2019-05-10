@@ -6,10 +6,10 @@
       </div>
       <el-form :model="formData" :rules="rules" label-width="80px" label-position="left" ref="ruleForm" status-icon>
         <el-form-item label="姓名" prop="userName">
-          <el-input v-model="formData.userName"></el-input>
+          <el-input v-model.trim="formData.userName"></el-input>
         </el-form-item>
         <el-form-item label="学号" prop="userAccount">
-          <el-input v-model="formData.userAccount"></el-input>
+          <el-input v-model.trim="formData.userAccount"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="userGender">
           <el-select v-model="formData.userGender">
@@ -37,10 +37,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="新密码" prop="userPassword">
-          <el-input v-model="formData.userPassword" type="password"></el-input>
+          <el-input v-model.trim="formData.userPassword" type="password"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="userPasswordAgain">
-          <el-input v-model="formData.userPasswordAgain" type="password"></el-input>
+          <el-input v-model.trim="formData.userPasswordAgain" type="password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :loading="isLoading" @click="save">提交</el-button>
@@ -59,6 +59,8 @@ export default {
     var validatePass = (rule, value, callback) => {
       if (!value) {
         callback(new Error('请输入密码'));
+      } else if (value.length < 6) {
+        callback(new Error('密码的位数至少为6位'));
       } else {
         if (this.formData.userPasswordAgain) {
           this.$refs.ruleForm.validateField('userPasswordAgain');
@@ -71,6 +73,15 @@ export default {
         callback(new Error('请再次输入密码'));
       } else if (value !== this.formData.userPassword) {
         callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
+    var validateUserAccount = (rule, value, callback) => {
+      const reg = /^[0-9]{6}$/;
+
+      if (!reg.test(value)) {
+        callback(new Error('请输入6位的数字'));
       } else {
         callback();
       }
@@ -92,10 +103,10 @@ export default {
       },
       rules: {
         userName: [
-          { required: true, message: '请输入姓名', trigger: 'blur' },
+          { min: 3, required: true, message: '请输入位数至少为3位的姓名', trigger: 'blur' },
         ],
         userAccount: [
-          { required: true, message: '请输入学号', trigger: 'blur' },
+          { required: true, validator: validateUserAccount, trigger: 'blur' },
         ],
         userGender: [
           { required: true, message: '请选择性别', trigger: 'blur' },
@@ -104,7 +115,7 @@ export default {
           { required: true, message: '请选择籍贯', trigger: 'blur' },
         ],
         userEmail: [
-          { required: true, message: '请选择邮箱', trigger: 'blur' },
+          { type: 'email', required: true, message: '请输入正确格式的邮箱', trigger: 'blur' },
         ],
         userClassId: [
           { required: true, message: '请选择班级', trigger: 'blur' },
