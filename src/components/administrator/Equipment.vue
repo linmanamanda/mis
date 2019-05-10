@@ -2,6 +2,7 @@
   <div class="Lab">
     <el-tabs>
       <el-tab-pane label="实验室信息">
+        <el-button type="primary">添加设备</el-button>
         <el-table
           :data="list"
           style="width: 100%">
