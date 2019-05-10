@@ -49,8 +49,11 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                type="danger"
-                @click="deleteFeedback(scope.row.suggestId, scope.$index)">删除反馈</el-button>
+                @click="deleteFeedback(scope.row.suggestId, scope.$index, '解决')">解决</el-button>
+              <el-button
+              size="mini"
+              type="danger"
+              @click="deleteFeedback(scope.row.suggestId, scope.$index, '忽略')">忽略</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -183,11 +186,11 @@ export default {
         } 
       })
     },
-    deleteFeedback(suggestId, index) {
+    deleteFeedback(suggestId, index, tip) {
       return service.deleteFeedback(suggestId)
       .then(res => {
         if (res.result) {
-          this.$message({ message: '删除成功', type: 'success' });
+          this.$message({ message: `${tip}成功`, type: 'success' });
           this.feedbacks.splice(index, 1);
         } 
       })
