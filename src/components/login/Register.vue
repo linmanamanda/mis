@@ -221,6 +221,10 @@ export default {
     margin: auto auto auto auto;
   }
 
+  .el-select {
+    width: 30% !important;
+  }
+
   .text {
     font-size: 14px;
   }
