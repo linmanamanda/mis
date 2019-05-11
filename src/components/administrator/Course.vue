@@ -255,7 +255,10 @@ export default {
     },
     addCourse() {
       const { courseName, courseUserId, courseLaboratoryId, courseClassList } = this.courseForm;
-      const courseClassIdList = courseClassList.map(item => { return item.classId });
+      let courseClassIdList = courseClassList.map(item => { return item.classId });
+
+      // 删除id为空的班级列
+      courseClassIdList = courseClassIdList.filter(item => { return item });
 
       return service.addCourse({ courseName, courseUserId, courseLaboratoryId, courseClassIdList })
       .then(res => {
