@@ -177,6 +177,8 @@ export default {
         if (res.result) {
           if (res.data) {
             this.scoreForm.homeworkURL = res.data.workUrl;
+          } else {
+            this.scoreForm.homeworkURL = '';
           }
           this.dialogFormVisible = true;
         } 
