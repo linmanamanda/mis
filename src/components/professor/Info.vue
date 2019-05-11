@@ -2,48 +2,84 @@
   <el-tabs v-model="tabIndex" @tab-click="tabSwitch">
     <el-tab-pane label="查看" name="detail">
       <el-form label-width="80px" label-position="left">
-        <el-form-item label="学号">
-          <span>{{ renderData.userAccount }}</span>
-        </el-form-item>
-        <el-form-item label="姓名">
-          <span>{{ renderData.userName }}</span>
-        </el-form-item>
-        <el-form-item label="性别">
-          <span>{{ renderData.userGender }}</span>
-        </el-form-item>
-        <el-form-item label="籍贯">
-          <span>{{ renderData.userBirthplace }}</span>
-        </el-form-item>
-        <el-form-item label="邮箱">
-          <span>{{ renderData.userEmail }}</span>
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="学号">
+              <span>{{ renderData.userAccount }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="姓名">
+              <span>{{ renderData.userName }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="性别">
+              <span>{{ renderData.userGender }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="籍贯">
+              <span>{{ renderData.userBirthplace }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="邮箱">
+              <span>{{ renderData.userEmail }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="编辑" name="edition">
       <el-form :model="formData" :rules="rules" label-width="80px" label-position="left" ref="ruleForm" status-icon>
-        <el-form-item label="学号">
-          <el-input v-model="formData.userAccount" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="userName">
-          <el-input v-model="formData.userName"></el-input>
-        </el-form-item>
-        <el-form-item label="性别" prop="userGender">
-          <el-select v-model="formData.userGender">
-            <el-option label="男" value="0"></el-option>
-            <el-option label="女" value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="籍贯" prop="userBirthplaceId">
-          <el-select v-model="formData.userBirthplaceId">
-            <el-option v-for="item in birthPlace" :key="item.birthplaceId" :label="item.birthplaceName" :value="item.birthplaceId"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="userEmail">
-          <el-input v-model="formData.userEmail"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="save">保存</el-button>
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="学号">
+              <el-input v-model="formData.userAccount" disabled></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="姓名" prop="userName">
+              <el-input v-model="formData.userName"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="性别" prop="userGender">
+              <el-select v-model="formData.userGender">
+                <el-option label="男" value="0"></el-option>
+                <el-option label="女" value="1"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="籍贯" prop="userBirthplaceId">
+              <el-select v-model="formData.userBirthplaceId">
+                <el-option v-for="item in birthPlace" :key="item.birthplaceId" :label="item.birthplaceName" :value="item.birthplaceId"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="userEmail">
+              <el-input v-model="formData.userEmail"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item>
+              <el-button type="primary" @click="save">保存</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-tab-pane>
   </el-tabs>
@@ -172,12 +208,8 @@ export default {
     margin: auto auto auto auto;
   }
 
-  .el-form {
-    width: 730px !important;
-  }
-
-  .text {
-    font-size: 14px;
+  .el-input {
+    width: 90%;
   }
 
   .item {
