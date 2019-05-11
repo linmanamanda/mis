@@ -2,7 +2,7 @@
   <div class="Lab">
     <el-tabs>
       <el-tab-pane label="实验室信息">
-        <el-button type="primary">添加设备</el-button>
+        <el-button type="primary" @click="addEquipmentVisible = true;">添加设备</el-button>
         <el-table
           :data="list"
           style="width: 100%">
@@ -108,8 +108,28 @@
         </el-table-column>
       </el-table> 
     </el-dialog>
+
+    <el-dialog title="添加设备" :visible.sync="addEquipmentVisible">
+      <el-form label-position="top">
+        <el-form-item label="设备名称">
+          <el-input type="text" v-model="addEquipmentForm.deviceName"></el-input>
+        </el-form-item>
+        <el-form-item label="设备编号">
+          <el-input type="textarea" v-model="addEquipmentForm.deviceNumber"></el-input>
+        </el-form-item>
+        <el-form-item label="所属实验室">
+          <el-select v-model="addEquipmentForm.deviceLaboratoryId">
+            <el-option v-for="item in list" :label="item.laboratoryName" :value="item.laboratoryId"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="addEquipment">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
+
 
 <script>
 import service from '../../services/administrator/equipment';
@@ -124,6 +144,12 @@ export default {
       equipmentsVisible: false,
       equipmentStatus: "0",
       equipmentIndex: -1,
+      addEquipmentVisible: false,
+      addEquipmentForm: {
+        deviceName: '',
+        deviceNumber: '',
+        deviceLaboratoryId: '',
+      },
     }
   },
   mounted() {
@@ -148,6 +174,15 @@ export default {
           this.equipments.forEach(item => {
             item.isEditing = false;
           });
+        } 
+      })
+    },
+    addEquipment() {
+      return service.addEquipment(this.addEquipmentForm)
+      .then(res => {
+        if (res.result) {
+          this.$message({ message: '添加成功', type: 'success' });
+          this.addEquipmentVisible = false;
         } 
       })
     },

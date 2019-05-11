@@ -10,6 +10,9 @@ export default {
   getEquipments(laboratoryId) {
     return api.get(`/device/device/${laboratoryId}`);
   },
+  addEquipment(params) {
+    return api.post(`/device/device`, params);
+  },
   // 删除设备
   deleteEquipment(deviceId) {
     return api.delete(`/device/device/${deviceId}`);
