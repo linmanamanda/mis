@@ -175,7 +175,9 @@ export default {
       return service.getHomeworkURL(this.scoreForm.scoreCourseId, this.scoreForm.scoreUserId)
       .then(res => {
         if (res.result) {
-          this.scoreForm.homeworkURL = res.data.workUrl;
+          if (res.data) {
+            this.scoreForm.homeworkURL = res.data.workUrl;
+          }
           this.dialogFormVisible = true;
         } 
       })
