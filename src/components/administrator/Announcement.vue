@@ -26,7 +26,7 @@
             :limit="1"
             :before-upload="setHomeworkIndex(scope.$index)"
             :on-success="postHomeworks">
-            <el-button size="mini">上传</el-button>
+            <el-button size="mini">上传附件</el-button>
           </el-upload>
           <el-button
             size="mini"

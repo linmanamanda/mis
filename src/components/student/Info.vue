@@ -183,7 +183,6 @@ export default {
   mounted() {
     this.fetchDetail();
     this.fetchBirthPlace();
-    this.renderClass();
   },
   methods: {
     fetchDetail() {
@@ -191,6 +190,7 @@ export default {
       .then(res => {
         if (res.result) {
           this.renderData = res.data;
+          this.renderClass();
         }
       })
     },
