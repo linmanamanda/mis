@@ -86,10 +86,10 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="班级" prop="userClassId">
-              <el-select v-model="formData.collegeId" placeholder="学院" @change="fetchMajor">
+              <el-select v-model="formData.userCollegeId" placeholder="学院" @change="fetchMajor">
                 <el-option v-for="item in college" :key="item.collegeId" :label="item.collegeName" :value="item.collegeId"></el-option>
               </el-select>
-              <el-select v-model="formData.majorId" placeholder="专业" @change="fetchClass" style="margin-left: 12px;">
+              <el-select v-model="formData.userMajorId" placeholder="专业" @change="fetchClass" style="margin-left: 12px;">
                 <el-option v-for="item in major" :key="item.majorId" :label="item.majorName" :value="item.majorId"></el-option>
               </el-select>
               <el-select v-model="formData.userClassId" placeholder="班级" style="margin-left: 12px;">
@@ -148,8 +148,8 @@ export default {
         userGender: '',
         userEmail: '',
         userBirthplaceId: '',
-        collegeId: '',
-        majorId: '',
+        userCollegeId: '',
+        userMajorId: '',
         userClassId: '',
         userEnterSchoolTime: '',
       },
@@ -190,19 +190,7 @@ export default {
       return service.getDetail()
       .then(res => {
         if (res.result) {
-          const { userAccount, userName, userGender, userBirthplace, userEmail, userCollegeName, userMajorName, userClassName, userEnterSchoolTime  } = res.data;
-
-          this.renderData = {
-            userName,
-            userAccount,
-            userGender,
-            userEmail,
-            userBirthplace,
-            userCollegeName, 
-            userMajorName, 
-            userClassName,
-            userEnterSchoolTime,
-          };
+          this.renderData = res.data;
         }
       })
     },
@@ -212,16 +200,16 @@ export default {
       }
     },
     renderEdition() {
-      const { userAccount, userName, userGender, userEmail, userEnterSchoolTime  } = this.renderData;
+      const { userAccount, userName, userGender, userEmail, userEnterSchoolTime, userCollegeId, userMajorId, userClassId  } = this.renderData;
+
       this.formData = {
         userName,
         userAccount,
         userGender: userGender === '男' ? '0' : '1',
         userEmail,
         userBirthplaceId: '',
-        collegeId: '',
-        majorId: '',
-        userClassId: '',
+        userCollegeId,
+        userMajorId,
         userEnterSchoolTime,
       };
     },
@@ -242,14 +230,14 @@ export default {
       })
     },
     fetchMajor() {
-      const { collegeId } = this.formData
+      const { userCollegeId } = this.formData
       this.major = [];
-      this.formData.majorId = '';
+      this.formData.userMajorId = '';
       this.classes = [];
       this.formData.userClassId = '';
 
-      if (collegeId) {
-        return service.getMajor(collegeId)
+      if (userCollegeId) {
+        return service.getMajor(userCollegeId)
         .then(res => {
           if (res.result) {
             this.major = res.data;
@@ -259,12 +247,12 @@ export default {
 
     },
     fetchClass() {
-      const { majorId } = this.formData
+      const { userMajorId } = this.formData
       this.classes = [];
       this.formData.userClassId = '';
 
-      if (majorId) {
-        return service.getClass(majorId)
+      if (userMajorId) {
+        return service.getClass(userMajorId)
         .then(res => {
           if (res.result) {
             this.classes = res.data;

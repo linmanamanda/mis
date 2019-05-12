@@ -134,7 +134,7 @@ export default {
       return service.getDetail()
       .then(res => {
         if (res.result) {
-          const { userAccount, userName, userGender, userBirthplace, userEmail, userCollegeName, userMajorName, userClassName, userEnterSchoolTime  } = res.data;
+          const { userAccount, userName, userGender, userBirthplace, userEmail, userCollegeName, userMajorName, userClassName, userBirthplaceId, userEnterSchoolTime  } = res.data;
 
           this.renderData = {
             userName,
@@ -142,6 +142,7 @@ export default {
             userGender,
             userEmail,
             userBirthplace,
+            userBirthplaceId,
             userCollegeName, 
             userMajorName, 
             userClassName,
@@ -156,13 +157,13 @@ export default {
       }
     },
     renderEdition() {
-      const { userAccount, userName, userGender, userEmail, userEnterSchoolTime  } = this.renderData;
+      const { userAccount, userName, userGender, userEmail, userEnterSchoolTime, userBirthplaceId  } = this.renderData;
       this.formData = {
         userName,
         userAccount,
         userGender: userGender === '男' ? '0' : '1',
         userEmail,
-        userBirthplaceId: '',
+        userBirthplaceId,
         collegeId: '',
         majorId: '',
         userClassId: '',
