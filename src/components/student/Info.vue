@@ -183,7 +183,7 @@ export default {
   mounted() {
     this.fetchDetail();
     this.fetchBirthPlace();
-    this.fetchCollege();
+    this.renderClass();
   },
   methods: {
     fetchDetail() {
@@ -194,22 +194,45 @@ export default {
         }
       })
     },
+    renderClass() {
+      return service.getCollege()
+      .then(res => {
+        if (res.result) {
+          this.college = res.data;
+          const { userCollegeId } = this.renderData
+          return service.getMajor(userCollegeId)
+          .then(res => {
+            if (res.result) {
+              this.major = res.data;
+              const { userMajorId } = this.renderData
+              return service.getClass(userMajorId)
+              .then(res => {
+                if (res.result) {
+                  this.classes = res.data;
+                }
+              })
+            }
+          })
+        }
+      })
+    },
     tabSwitch() {
       if (this.tabIndex === 'edition') {
         this.renderEdition();
       }
     },
     renderEdition() {
-      const { userAccount, userName, userGender, userEmail, userEnterSchoolTime, userCollegeId, userMajorId, userClassId  } = this.renderData;
+      const { userAccount, userName, userGender, userEmail, userEnterSchoolTime, userCollegeId, userMajorId, userClassId, userBirthplaceId  } = this.renderData;
 
       this.formData = {
         userName,
         userAccount,
         userGender: userGender === '男' ? '0' : '1',
         userEmail,
-        userBirthplaceId: '',
+        userBirthplaceId,
         userCollegeId,
         userMajorId,
+        userClassId,
         userEnterSchoolTime,
       };
     },

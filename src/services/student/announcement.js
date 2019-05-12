@@ -14,4 +14,12 @@ export default {
   addAnnouncement(params) {
     return api.post(`/notice/notice`, params);
   },
+  getAttachment(noticeId) {
+    return api.get(`/file/notice/${noticeId}`);
+  },
+  downloadFile(params) {
+    return api.post(`/file/download`, params, {
+      responseType: 'blob',
+    });
+  },
 }

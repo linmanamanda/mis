@@ -19,6 +19,15 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <el-upload
+            style="display: inline-block; margin-right: 8px;"
+            action="http://62.234.57.192:8080/laboratory/file/upload"
+            :show-file-list="false"
+            :limit="1"
+            :before-upload="setHomeworkIndex(scope.$index)"
+            :on-success="postHomeworks">
+            <el-button size="mini">上传</el-button>
+          </el-upload>
           <el-button
             size="mini"
             type="danger"
@@ -56,6 +65,7 @@ export default {
       dialogFormVisible: false,
       noticeTitle: '',
       noticeContent: '',
+      index: -1,
     }
   },
   mounted() {
@@ -97,6 +107,25 @@ export default {
         }
       })
     },
+    setHomeworkIndex(index) {
+      this.index = index
+    },
+    postHomeworks(res) {
+      if (res.result) {
+        const params = {
+          noticeId: this.list[this.index].noticeId,
+          fileName: res.data,
+        }
+
+        return service.postAnnouncement(params)
+        .then(res => {
+          if (res.result) {
+            this.$message({ message: '上传成功', type: 'success' });
+            this.index = -1;
+          }
+        })
+      }
+    }
   }
 }
 </script>

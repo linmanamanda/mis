@@ -1,6 +1,7 @@
 <template>
   <el-table
     :data="list"
+    @expand-change="fetchAttachment"
     style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
@@ -13,6 +14,9 @@
           </el-form-item>
           <el-form-item label="内容">
             <span>{{ props.row.noticeContent }}</span>
+          </el-form-item>
+          <el-form-item label="附件">
+            <span style="cursor: pointer; color: #409EFF;" @click="downloadAttachment(props.row.url)">附件下载</span>
           </el-form-item>
         </el-form>
       </template>
@@ -65,6 +69,24 @@ export default {
         }
       })
       .catch(err => { console.log(err) })
+    },
+    fetchAttachment(row) {
+      return service.getAttachment(row.noticeId)
+      .then(res => {
+        if (res.result) {
+          if (res.data) {
+            row.url = res.data;
+          }
+        } 
+      })
+    },
+    downloadAttachment(downloadURL) {
+      const metaType = downloadURL.split('.')[1];
+
+      return service.downloadFile({ workUrl: downloadURL })
+      .then(res => {
+        this.downloadFile(res, metaType)
+      })
     },
   },
 }

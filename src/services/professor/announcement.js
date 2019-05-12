@@ -14,4 +14,7 @@ export default {
   addAnnouncement(params) {
     return api.post(`/notice/notice`, params);
   },
+  postAnnouncement(params) {
+    return api.post(`/file/notice`, params);
+  },
 }
