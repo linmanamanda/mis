@@ -31,6 +31,9 @@
       </el-aside>
       
       <el-container>
+        <el-header style="text-align: right; font-size: 12px">
+          <span style="cursor: pointer;" @click="quit()">退出</span>
+        </el-header>
         <el-main>
           <transition>
             <router-view></router-view>
@@ -54,6 +57,11 @@ export default {
     return {
       tableData: Array(20).fill(item)
     }
+  },
+  methods: {
+    quit() {
+      window.location.href = '/login';
+    },
   }
 }
 </script>
